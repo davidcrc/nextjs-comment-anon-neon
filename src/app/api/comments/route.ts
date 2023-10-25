@@ -52,7 +52,7 @@ export async function POST(request: Request, { params }: Params) {
     const response = await db
       .insertInto("Comment")
       .values({ comment, pageHandle: page })
-      .returning("id")
+      .returningAll()
       .executeTakeFirstOrThrow();
 
     return NextResponse.json(response);

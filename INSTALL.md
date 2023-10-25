@@ -110,3 +110,11 @@ vercel env add
 ```bash
 vercel
 ```
+
+# Add react-query
+
+```bash
+yarn add react-query
+```
+
+- then create a provider like "src/providers/index.tsx"

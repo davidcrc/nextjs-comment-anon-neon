@@ -37,8 +37,12 @@ export async function POST(request: Request) {
     console.log("response", response);
 
     return NextResponse.json(response);
-  } catch (error) {
-    console.log("err", error);
+  } catch (error: any) {
+    // console.log("err", typeof error.code);
+    if (error.code === "23505") {
+      return NextResponse.json({ message: error.detail }, { status: 409 });
+    }
+
     return NextResponse.json(error, { status: 500 });
   }
 }

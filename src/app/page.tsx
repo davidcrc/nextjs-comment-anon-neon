@@ -1,31 +1,83 @@
-// "use client";
+"use client";
 
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-// import { db } from "../db/db";
+import { useMutation } from "react-query";
 
 export default function Home() {
-  // const callme = async () => {
-  //   console.log("callmeee");
+  const router = useRouter();
 
-  //   const response = await db
-  //     .selectFrom("Comment")
-  //     .selectAll()
-  //     // .where("StockHistory.stock", "=", "AAPL")
-  //     .execute();
+  const { mutate: mutationPage, isLoading } = useMutation({
+    mutationFn: (handle: string) => {
+      return fetch("/api/pages", {
+        method: "POST",
+        body: JSON.stringify({ handle }),
+      });
+    },
+    onSuccess: async (res) => {
+      // console.log("SS", res);
+      if (res.ok) {
+        const body = await res.json();
+        const handle = body.handle;
 
-  //   console.log("response", response);
-  // };
+        router.push(`/${handle}`);
+      } else {
+        console.log("err", res);
+      }
+    },
+  });
 
-  // useEffect(() => {
-  //   callme();
-  // }, []);
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const data = new FormData(event.target as HTMLFormElement);
+
+    const handle = data.get("handle") as string;
+
+    if (!handle) return;
+
+    mutationPage(handle);
+  }
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-4">Welcome to our website!</h1>
-      <p className="text-lg text-gray-600">
-        We are a creative agency specializing in web development.
-      </p>
-    </div>
+    <main className="text-center p-4">
+      <h1 className="mb-4 text-4xl font-extrabold dark:text-white">
+        Ask anonymously
+      </h1>
+
+      {isLoading && <p>Your page is being created...</p>}
+
+      {!isLoading && (
+        <div className="w-full flex justify-center">
+          <form className="w-full max-w-xs" onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="handle"
+              >
+                Handle
+              </label>
+              <input
+                className="shadow border rounded w-full py-2 px-3 text-gray-700"
+                id="handle"
+                name="handle"
+                type="text"
+                placeholder="@user"
+                required
+              />
+            </div>
+
+            <div>
+              <button
+                className="bg-blue-500 rounded shadow text-white py-2 px-4"
+                type="submit"
+              >
+                Create page
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+    </main>
   );
 }
