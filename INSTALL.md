@@ -118,3 +118,23 @@ yarn add react-query
 ```
 
 - then create a provider like "src/providers/index.tsx"
+
+# Add blob vercel
+
+```bash
+yarn add @vercel/blob
+```
+
+- firts : Connect blob to a project in web
+
+- then run:
+
+```bash
+vercel env pull .env.development.local
+```
+
+verify exist "BLOB_READ_WRITE_TOKEN"
+
+- => Existing two way to upload:
+  -- first support 4.5mb
+  -- client: no limit
