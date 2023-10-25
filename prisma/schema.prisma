@@ -22,12 +22,12 @@ datasource db {
 }
 
 model Comment {
-  id         String   @id @default(uuid())
-  comment    String   @db.VarChar(255)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id         String    @id @default(dbgenerated("gen_random_uuid()"))
+  comment    String    @db.VarChar(255)
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
   pageHandle String
-  page       Page     @relation(fields: [pageHandle], references: [handle])
+  page       Page      @relation(fields: [pageHandle], references: [handle])
 }
 
 model Page {

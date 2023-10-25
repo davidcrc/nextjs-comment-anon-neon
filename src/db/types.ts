@@ -5,10 +5,10 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export type Comment = {
-    id: string;
+    id: Generated<string>;
     comment: string;
-    createdAt: Generated<Timestamp>;
-    updatedAt: Timestamp;
+    createdAt: Generated<Timestamp | null>;
+    updatedAt: Timestamp | null;
     pageHandle: string;
 };
 export type Page = {
